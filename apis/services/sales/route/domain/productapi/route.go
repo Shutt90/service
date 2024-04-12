@@ -18,7 +18,7 @@ type Config struct {
 	Log        *logger.Logger
 	UserBus    *userbus.Core
 	ProductBus *productbus.Core
-	AuthSrv    *authsrv.AuthSrv
+	AuthSrv    *authsrv.AuthSrvHttp
 }
 
 // Routes adds specific routes for this group.

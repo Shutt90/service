@@ -13,7 +13,7 @@ import (
 )
 
 // Authenticate validates a JWT from the `Authorization` header.
-func Authenticate(log *logger.Logger, authSrv *authsrv.AuthSrv) web.MidHandler {
+func Authenticate(log *logger.Logger, authSrv *authsrv.AuthSrvHttp) web.MidHandler {
 	m := func(handler web.Handler) web.Handler {
 		h := func(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
 			ctxAuth, cancel := context.WithTimeout(ctx, time.Second)

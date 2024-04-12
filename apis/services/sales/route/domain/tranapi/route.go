@@ -21,7 +21,7 @@ type Config struct {
 	DB         *sqlx.DB
 	UserBus    *userbus.Core
 	ProductBus *productbus.Core
-	AuthSrv    *authsrv.AuthSrv
+	AuthSrv    *authsrv.AuthSrvHttp
 }
 
 // Routes adds specific routes for this group.

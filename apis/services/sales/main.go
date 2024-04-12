@@ -172,7 +172,7 @@ func run(ctx context.Context, log *logger.Logger) error {
 	logFunc := func(ctx context.Context, msg string) {
 		log.Info(ctx, "authapi", "message", msg)
 	}
-	authSrv := authsrv.New(cfg.Auth.Host, logFunc)
+	authSrv := authsrv.NewHttp(cfg.Auth.Host, logFunc)
 
 	// -------------------------------------------------------------------------
 	// Start Tracing Support

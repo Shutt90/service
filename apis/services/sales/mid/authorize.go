@@ -22,7 +22,7 @@ import (
 var ErrInvalidID = errors.New("ID is not in its proper form")
 
 // Authorize executes the specified role and does not extract any domain data.
-func Authorize(log *logger.Logger, authSrv *authsrv.AuthSrv, rule string) web.MidHandler {
+func Authorize(log *logger.Logger, authSrv *authsrv.AuthSrvHttp, rule string) web.MidHandler {
 	m := func(handler web.Handler) web.Handler {
 		h := func(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
 			userID, err := mid.GetUserID(ctx)
@@ -56,7 +56,7 @@ func Authorize(log *logger.Logger, authSrv *authsrv.AuthSrv, rule string) web.Mi
 // from the DB if a user id is specified in the call. Depending on the rule
 // specified, the userid from the claims may be compared with the specified
 // user id.
-func AuthorizeUser(log *logger.Logger, authSrv *authsrv.AuthSrv, userBus *userbus.Core, rule string) web.MidHandler {
+func AuthorizeUser(log *logger.Logger, authSrv *authsrv.AuthSrvHttp, userBus *userbus.Core, rule string) web.MidHandler {
 	m := func(handler web.Handler) web.Handler {
 		h := func(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
 			var userID uuid.UUID
@@ -107,7 +107,7 @@ func AuthorizeUser(log *logger.Logger, authSrv *authsrv.AuthSrv, userBus *userbu
 // product from the DB if a product id is specified in the call. Depending on
 // the rule specified, the userid from the claims may be compared with the
 // specified user id from the product.
-func AuthorizeProduct(log *logger.Logger, authSrv *authsrv.AuthSrv, productBus *productbus.Core) web.MidHandler {
+func AuthorizeProduct(log *logger.Logger, authSrv *authsrv.AuthSrvHttp, productBus *productbus.Core) web.MidHandler {
 	m := func(handler web.Handler) web.Handler {
 		h := func(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
 			var userID uuid.UUID
@@ -159,7 +159,7 @@ func AuthorizeProduct(log *logger.Logger, authSrv *authsrv.AuthSrv, productBus *
 // home from the DB if a home id is specified in the call. Depending on
 // the rule specified, the userid from the claims may be compared with the
 // specified user id from the home.
-func AuthorizeHome(log *logger.Logger, authSrv *authsrv.AuthSrv, homeBus *homebus.Core) web.MidHandler {
+func AuthorizeHome(log *logger.Logger, authSrv *authsrv.AuthSrvHttp, homeBus *homebus.Core) web.MidHandler {
 	m := func(handler web.Handler) web.Handler {
 		h := func(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
 			var userID uuid.UUID

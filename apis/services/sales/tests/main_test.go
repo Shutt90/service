@@ -61,7 +61,7 @@ func startTest(t *testing.T, testName string) (*dbtest.Test, *apptest.AppTest) {
 	}
 
 	server := httptest.NewServer(authMux)
-	authSrv := authsrv.New(server.URL, logFunc)
+	authSrv := authsrv.NewHttp(server.URL, logFunc)
 
 	// -------------------------------------------------------------------------
 

@@ -45,7 +45,7 @@ type Config struct {
 	Build     string
 	Shutdown  chan os.Signal
 	Log       *logger.Logger
-	AuthSrv   *authsrv.AuthSrv
+	AuthSrv   *authsrv.AuthSrvHttp
 	DB        *sqlx.DB
 	Tracer    trace.Tracer
 	BusDomain BusDomain

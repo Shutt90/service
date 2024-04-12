@@ -16,7 +16,7 @@ import (
 type Config struct {
 	Log     *logger.Logger
 	UserBus *userbus.Core
-	AuthSrv *authsrv.AuthSrv
+	AuthSrv *authsrv.AuthSrvHttp
 }
 
 // Routes adds specific routes for this group.
