@@ -5,6 +5,7 @@ import (
 	"errors"
 	"expvar"
 	"fmt"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -13,8 +14,10 @@ import (
 	"time"
 
 	"github.com/ardanlabs/conf/v3"
+	"github.com/ardanlabs/service/apis/services/auth/grpc/route/authapi"
 	"github.com/ardanlabs/service/apis/services/auth/http/build/all"
 	"github.com/ardanlabs/service/apis/services/auth/http/mux"
+	"github.com/ardanlabs/service/app/api/authsrv/gprc"
 	"github.com/ardanlabs/service/app/api/debug"
 	"github.com/ardanlabs/service/business/api/auth"
 	"github.com/ardanlabs/service/business/api/delegate"
@@ -31,6 +34,7 @@ import (
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
+	"google.golang.org/grpc"
 )
 
 var build = "develop"
@@ -251,6 +255,21 @@ func run(ctx context.Context, log *logger.Logger) error {
 	}()
 
 	// -------------------------------------------------------------------------
+
+	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", 8000))
+	if err != nil {
+		return fmt.Errorf("failed to listen: %v", err)
+	}
+
+	var opts []grpc.ServerOption
+	grpcServer := grpc.NewServer(opts...)
+
+	go func() {
+		gprc.RegisterAuthServer(grpcServer, authapi.New(userBus, auth))
+		grpcServer.Serve(lis)
+	}()
+
+	// -------------------------------------------------------------------------
 	// Shutdown
 
 	select {
@@ -268,6 +287,8 @@ func run(ctx context.Context, log *logger.Logger) error {
 			api.Close()
 			return fmt.Errorf("could not stop server gracefully: %w", err)
 		}
+
+		grpcServer.GracefulStop()
 	}
 
 	return nil
